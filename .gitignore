@@ -15,6 +15,7 @@
 
 # Gem specific
 Gemfile.lock
+/gemfiles/
 
 # Environment variables
 .env
