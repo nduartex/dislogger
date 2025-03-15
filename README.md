@@ -1,7 +1,7 @@
 # Dislogger
 
 [![Gem Version](https://badge.fury.io/rb/dislogger.svg)](https://badge.fury.io/rb/dislogger)
-[![Coverage Status](https://coveralls.io/repos/github/yourusername/dislogger/badge.svg?branch=main)](https://coveralls.io/github/yourusername/dislogger?branch=main)
+[![Coverage Status](https://coveralls.io/repos/github/nduartex/dislogger/badge.svg?branch=master)](https://coveralls.io/github/nduartex/dislogger?branch=master)
 
 A Ruby on Rails gem for elegant error handling and Discord notifications. Automatically capture and notify errors through Discord webhooks while maintaining clean error responses for your API.
 
