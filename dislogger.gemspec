@@ -10,15 +10,15 @@ Gem::Specification.new do |spec|
 
   spec.summary = "A Rails gem for standardized error handling with Discord notifications"
   spec.description = "DisLogger provides a robust error handling system for Rails applications with automatic Discord notifications and standardized JSON responses"
-  spec.homepage = "https://github.com/nelsonduarte/dislogger"
+  spec.homepage = "https://github.com/nduartex/dislogger"
   spec.license = "MIT"
   spec.required_ruby_version = ">= 2.7.0"
 
   spec.metadata["allowed_push_host"] = "https://rubygems.org"
 
   spec.metadata["homepage_uri"] = spec.homepage
-  spec.metadata["source_code_uri"] = "https://github.com/nelsonduarte/dislogger"
-  spec.metadata["changelog_uri"] = "https://github.com/nelsonduarte/dislogger/blob/main/CHANGELOG.md"
+  spec.metadata["source_code_uri"] = "https://github.com/nduartex/dislogger"
+  spec.metadata["changelog_uri"] = "https://github.com/nduartex/dislogger/blob/main/CHANGELOG.md"
 
   # Specify which files should be added to the gem when it is released.
   # The `git ls-files -z` loads the files in the RubyGem that have been added into git.
