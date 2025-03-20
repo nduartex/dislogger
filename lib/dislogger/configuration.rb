@@ -13,8 +13,8 @@ module Dislogger
       @discord_webhook_url = nil
       @bot_username = 'Error Logger'
       @backtrace_lines_limit = 5
-      @enabled_environments = ['production', 'staging']
-      @environment = defined?(Rails) ? Rails.env : 'development'
+      @enabled_environments = %w[production staging]
+      @environment = nil
       @error_color_map = {
         500 => 15158332, # Red for server errors
         404 => 3447003,  # Blue for not found

@@ -9,8 +9,11 @@ module Dislogger
         formatted_message = format_message(message, status, backtrace)
         send_notification(formatted_message)
       rescue StandardError => e
-        Rails.logger.error("Discord notification failed: #{e.message}")
-        Rails.logger.error(e.backtrace.join("\n")) if e.backtrace
+        if defined?(Rails) && Rails.logger
+          Rails.logger.error("Discord notification failed: #{e.message}")
+        else
+          warn("Discord notification failed: #{e.message}")
+        end
         false
       end
 
@@ -33,21 +36,20 @@ module Dislogger
         )
         
         unless response.success?
-          Rails.logger.error("Discord API Error: #{response.code} - #{response.body}")
+          error_message = "Discord API Error: #{response.code} - #{response.body}"
+          if defined?(Rails) && Rails.logger
+            Rails.logger.error(error_message)
+          else
+            warn(error_message)
+          end
           return false
         end
         
         true
-      rescue StandardError => e
-        Rails.logger.error("Discord notification request failed: #{e.message}")
-        Rails.logger.error(e.backtrace.join("\n")) if e.backtrace
-        false
       end
 
-      private
-
       def enabled?
-        @config.enabled_environments.include?(Rails.env)
+        @config.enabled?
       end
     end
   end
