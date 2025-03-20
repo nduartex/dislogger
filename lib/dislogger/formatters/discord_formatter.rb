@@ -8,11 +8,11 @@ module Dislogger
           username: @config.bot_username,
           embeds: [
             {
-              title: "#{@config.environment.capitalize} - Error Notification (#{@status})",
-              description: @message,
-              color: @config.error_color_map[@status] || @config.error_color_map[:default],
+              title: format_title,
+              description: format_description,
+              color: get_error_color,
               fields: build_fields,
-              timestamp: Time.current.utc.strftime('%Y-%m-%dT%H:%M:%SZ')
+              timestamp: Time.current.utc.iso8601
             }
           ]
         }
@@ -20,21 +20,45 @@ module Dislogger
 
       private
 
+      def format_title
+        "#{@config.environment.capitalize} - Error Notification (#{@status})"
+      end
+
+      def format_description
+        return @message if @message.is_a?(String)
+        return @message.message if @message.respond_to?(:message)
+        @message.to_s
+      end
+
+      def get_error_color
+        @config.error_color_map[@status] || @config.error_color_map[:default]
+      end
+
       def build_fields
         fields = [
           { name: 'Status Code', value: @status.to_s, inline: true },
           { name: 'Environment', value: @config.environment, inline: true }
         ]
 
-        if @backtrace
+        if @backtrace && !@backtrace.empty?
           fields << {
             name: 'Backtrace',
-            value: @backtrace.first(@config.backtrace_lines_limit).join("\n"),
+            value: format_backtrace(@backtrace),
             inline: false
           }
         end
 
         fields
+      end
+
+      def format_backtrace(backtrace)
+        return 'No backtrace available' if backtrace.nil? || backtrace.empty?
+        
+        trace = backtrace.first(@config.backtrace_lines_limit)
+        if trace.length >= @config.backtrace_lines_limit
+          trace << "... (truncated)"
+        end
+        trace.join("\n")
       end
     end
   end
