@@ -8,6 +8,10 @@ module Dislogger
 
         formatted_message = format_message(message, status, backtrace)
         send_notification(formatted_message)
+      rescue StandardError => e
+        Rails.logger.error("Discord notification failed: #{e.message}")
+        Rails.logger.error(e.backtrace.join("\n")) if e.backtrace
+        false
       end
 
       protected
@@ -22,17 +26,28 @@ module Dislogger
       end
 
       def send_notification(payload)
-        HTTParty.post(
+        response = HTTParty.post(
           @config.discord_webhook_url,
           body: payload.to_json,
           headers: { 'Content-Type' => 'application/json' }
         )
-      rescue StandardError => e
-        if defined?(Rails) && Rails.logger
-          Rails.logger.error("Discord notification failed: #{e.message}")
-        else
-          warn("Discord notification failed: #{e.message}")
+        
+        unless response.success?
+          Rails.logger.error("Discord API Error: #{response.code} - #{response.body}")
+          return false
         end
+        
+        true
+      rescue StandardError => e
+        Rails.logger.error("Discord notification request failed: #{e.message}")
+        Rails.logger.error(e.backtrace.join("\n")) if e.backtrace
+        false
+      end
+
+      private
+
+      def enabled?
+        @config.enabled_environments.include?(Rails.env)
       end
     end
   end
