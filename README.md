@@ -7,12 +7,13 @@ A Ruby on Rails gem for elegant error handling and Discord notifications. Automa
 
 ## Features
 
-- 🚨 Automatic error handling for Rails applications
+- 🚨 Automatic error handling for Rails applications (both API and regular apps)
 - 🎯 Discord notifications for errors with customizable formatting
 - 📝 Detailed error information including backtrace
 - 🎨 Customizable error colors for different status codes
 - 🔧 Environment-based configuration
 - 🛡️ Built-in support for common Rails exceptions
+- ⚡ Works with both `ActionController::API` and `ActionController::Base`
 
 ## Installation
 
@@ -35,6 +36,16 @@ $ gem install dislogger
 ```
 
 ## Configuration
+
+### Quick Start
+
+After installing the gem, run the generator to create the configuration file:
+
+```bash
+$ rails generate dislogger:install
+```
+
+This will create an initializer at `config/initializers/dislogger.rb` with all available configuration options and their documentation.
 
 ### Setting up Discord Webhook
 
@@ -68,14 +79,17 @@ DISCORD_WEBHOOK_URL=https://discord.com/api/webhooks/your-webhook-url
 
 Make sure to add `.env` to your `.gitignore` file to keep your webhook URL secure.
 
-### Additional Configuration Options
+### Configuration Options
 
-Create an initializer file at `config/initializers/dislogger.rb` with all available options:
+The generator will create an initializer with all available options:
 
 ```ruby
 Dislogger.configure do |config|
   # Required: Your Discord webhook URL (preferably from environment variables)
   config.discord_webhook_url = ENV['DISCORD_WEBHOOK_URL']
+
+  # Required: Current environment (defaults to Rails.env if available)
+  config.environment = Rails.env
 
   # Optional: Custom bot username (default: 'Error Logger')
   config.bot_username = 'My App Error Logger'
@@ -83,11 +97,8 @@ Dislogger.configure do |config|
   # Optional: Number of backtrace lines to include (default: 5)
   config.backtrace_lines_limit = 10
 
-  # Optional: Environments where notifications are enabled (default: ['production', 'staging'])
+  # Optional: Environments where notifications are enabled (default: ['production', 'staging', 'development'])
   config.enabled_environments = ['production', 'staging', 'development']
-
-  # Optional: Current environment (default: Rails.env if available)
-  config.environment = 'production'
 
   # Optional: Custom error colors (default values shown below)
   config.error_color_map = {
@@ -107,6 +118,12 @@ end
 The gem automatically includes error handling in your Rails controllers. No additional setup is required!
 
 ```ruby
+# For API applications
+class ApplicationController < ActionController::API
+  # Error handling is automatically included
+end
+
+# For regular Rails applications
 class ApplicationController < ActionController::Base
   # Error handling is automatically included
 end
