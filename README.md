@@ -213,3 +213,19 @@ The gem is available as open source under the terms of the [MIT License](https:/
 ## Code of Conduct
 
 Everyone interacting in the Dislogger project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](CODE_OF_CONDUCT.md).
+
+## Error Types
+
+Dislogger handles a wide variety of errors commonly encountered in Rails applications. You can find a complete list of all handled error types, their descriptions, and corresponding HTTP status codes in the [Error Types Documentation](lib/dislogger/error_types.rb).
+
+The errors are categorized into:
+- System and Runtime Errors
+- Database Errors (ActiveRecord)
+- Controller and Routing Errors
+- Authorization Errors
+- Common Ruby Errors
+
+Each error type includes:
+- A descriptive message
+- The corresponding HTTP status code
+- Additional context when available
