@@ -61,11 +61,7 @@ module Dislogger
       notify_and_render_error(
         message: "An unexpected error occurred: #{exception.class.name} - #{exception.message}",
         status: :internal_server_error,
-        backtrace: exception.backtrace,
-        details: {
-          error_class: exception.class.name,
-          message: exception.message
-        }
+        backtrace: exception.backtrace
       )
     end
 
@@ -210,7 +206,7 @@ module Dislogger
 
       Rails.logger.info("[Dislogger] Notification result: #{notification_result}") if defined?(Rails)
 
-      render_error(message, status, error_details)
+      render_error(message, status, details)
     end
 
     def render_error(message, status, details = nil)
